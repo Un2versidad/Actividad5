@@ -4,27 +4,23 @@ import java.util.function.Function;
 public class CalculadoraGeometrica {
     public static void main(String[] args) {
         try (Scanner sc = new Scanner(System.in)) {
-            while (true) {
-                mostrarMenuFiguras();
-                int figura = getValidInput(sc, "Seleccione una opción (1-6): ", Integer::parseInt, input -> input >= 1 && input <= 6);
-
-                if (figura == 6) {
-                    System.out.println("¡Hasta luego!");
-                    break;
-                }
-
-                mostrarMenuOperaciones();
-                int operacion = getValidInput(sc, "Seleccione una operación (1-2): ", Integer::parseInt, input -> input >= 1 && input <= 2);
-
+            boolean salir = false;
+            while (!salir) {
+                int figura = getValidMenuInput(sc, "Seleccione una opción (1-6): ", 6, CalculadoraGeometrica::mostrarMenuFiguras);
+                int operacion = getValidMenuInput(sc, "Seleccione una operación (1-2): ", 2, CalculadoraGeometrica::mostrarMenuOperaciones);
                 switch (figura) {
                     case 1 -> calcularCirculo(sc, operacion);
                     case 2 -> calcularCuadrado(sc, operacion);
                     case 3 -> calcularTriangulo(sc, operacion);
                     case 4 -> calcularRectangulo(sc, operacion);
                     case 5 -> calcularPentagono(sc, operacion);
+                    case 6 -> salir = true;
                 }
             }
+        } catch (Exception e) {
+            System.out.println("Se ha producido un error inesperado: " + e.getMessage());
         }
+        System.out.println("¡Hasta luego!");
     }
 
     private static void mostrarMenuFiguras() {
@@ -126,6 +122,15 @@ public class CalculadoraGeometrica {
         } else {
             System.out.printf("Perímetro del pentágono: %.2f\n", 5 * lado);
         }
+    }
+
+    private static int getValidMenuInput(Scanner sc, String mensaje, int max, Runnable mostrarMenu) {
+        int result;
+        do {
+            mostrarMenu.run();
+            result = getValidInput(sc, mensaje, Integer::parseInt, input -> input >= 1 && input <= max);
+        } while (result < 1 || result > max);
+        return result;
     }
 
     private static <T> T getValidInput(Scanner sc, String mensaje, Function<String, T> parser, Function<T, Boolean> validator) {
