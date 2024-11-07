@@ -7,18 +7,20 @@ public class CalculadoraGeometrica {
             boolean salir = false;
             while (!salir) {
                 int figura = getValidMenuInput(sc, "Seleccione una opción (1-6): ", 6, CalculadoraGeometrica::mostrarMenuFiguras);
-                int operacion = getValidMenuInput(sc, "Seleccione una operación (1-2): ", 2, CalculadoraGeometrica::mostrarMenuOperaciones);
                 switch (figura) {
-                    case 1 -> calcularCirculo(sc, operacion);
-                    case 2 -> calcularCuadrado(sc, operacion);
-                    case 3 -> calcularTriangulo(sc, operacion);
-                    case 4 -> calcularRectangulo(sc, operacion);
-                    case 5 -> calcularPentagono(sc, operacion);
+                    case 1, 2, 3, 4, 5 -> {
+                        int operacion = getValidMenuInput(sc, "Seleccione una operación (1-2): ", 2, CalculadoraGeometrica::mostrarMenuOperaciones);
+                        switch (figura) {
+                            case 1 -> calcularCirculo(sc, operacion);
+                            case 2 -> calcularCuadrado(sc, operacion);
+                            case 3 -> calcularTriangulo(sc, operacion);
+                            case 4 -> calcularRectangulo(sc, operacion);
+                            case 5 -> calcularPentagono(sc, operacion);
+                        }
+                    }
                     case 6 -> salir = true;
                 }
             }
-        } catch (Exception e) {
-            System.out.println("Se ha producido un error inesperado: " + e.getMessage());
         }
         System.out.println("¡Hasta luego!");
     }
